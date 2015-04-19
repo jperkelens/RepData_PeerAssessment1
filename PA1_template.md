@@ -4,34 +4,6 @@
 ## Loading and preprocessing the data
 
 
-```
-## 
-## Attaching package: 'plyr'
-## 
-## The following object is masked from 'package:lubridate':
-## 
-##     here
-## 
-## 
-## Attaching package: 'dplyr'
-## 
-## The following objects are masked from 'package:plyr':
-## 
-##     arrange, count, desc, failwith, id, mutate, rename, summarise,
-##     summarize
-## 
-## The following objects are masked from 'package:lubridate':
-## 
-##     intersect, setdiff, union
-## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
 
 Download the zipfile, unzip it and load the csv file
 

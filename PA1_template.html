@@ -57,32 +57,6 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 
 <div id="loading-and-preprocessing-the-data" class="section level2">
 <h2>Loading and preprocessing the data</h2>
-<pre><code>## 
-## Attaching package: 'plyr'
-## 
-## The following object is masked from 'package:lubridate':
-## 
-##     here
-## 
-## 
-## Attaching package: 'dplyr'
-## 
-## The following objects are masked from 'package:plyr':
-## 
-##     arrange, count, desc, failwith, id, mutate, rename, summarise,
-##     summarize
-## 
-## The following objects are masked from 'package:lubridate':
-## 
-##     intersect, setdiff, union
-## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
 <p>Download the zipfile, unzip it and load the csv file</p>
 <pre class="r"><code>zipUrl &lt;- &quot;https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip&quot;
 dir.create('./data')
