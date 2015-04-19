@@ -1,23 +1,42 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
 
-```{r echo=FALSE}
-library(lubridate)
-library(ggplot2)
-library(plyr)
-library(dplyr)
+
+```
+## 
+## Attaching package: 'plyr'
+## 
+## The following object is masked from 'package:lubridate':
+## 
+##     here
+## 
+## 
+## Attaching package: 'dplyr'
+## 
+## The following objects are masked from 'package:plyr':
+## 
+##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+##     summarize
+## 
+## The following objects are masked from 'package:lubridate':
+## 
+##     intersect, setdiff, union
+## 
+## The following object is masked from 'package:stats':
+## 
+##     filter
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
 ```
 
 Download the zipfile, unzip it and load the csv file
 
-```{r warning=FALSE}
+
+```r
 zipUrl <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
 dir.create('./data')
 download.file(zipUrl, destfile = "./data/activity.zip", method="curl")
@@ -27,7 +46,8 @@ activityData <- read.csv("./data//activity.csv")
 
 Make the date column actual dates and remove NA measurements.
 
-```{r}
+
+```r
 activityData$date <- ymd(activityData$date)
 filteredData <- activityData[!is.na(activityData$steps),]
 ```
@@ -35,39 +55,52 @@ filteredData <- activityData[!is.na(activityData$steps),]
 ## What is mean total number of steps taken per day?
 
 Sum and plot steps by day
-```{r}
+
+```r
 sums <- aggregate(filteredData$steps, by=list(Day=filteredData$date), FUN=sum)
 plot(sums, type="h", ylab="Steps")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
 
-```{r echo=FALSE}
-paste("Mean steps per day:", mean(sums$x, na.rm=TRUE))
-paste("Median steps per day:", median(sums$x, na.rm=TRUE))
+
+
+```
+## [1] "Mean steps per day: 10766.1886792453"
+```
+
+```
+## [1] "Median steps per day: 10765"
 ```
 
 ## What is the average daily activity pattern?
 Aggregate by interval and take the average
 
-```{r}
+
+```r
 intvlSums <- aggregate(list(steps=filteredData$steps), by=list(interval=filteredData$interval), FUN=sum)
 intvlSums$steps <- intvlSums$steps / length(unique(activityData$date))
 plot(sums, type="l")
 ```
 
-```{r echo=FALSE}
-paste("Interval with most number of step is:", intvlSums[intvlSums$steps == max(intvlSums$steps), 1])
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+
+
+```
+## [1] "Interval with most number of step is: 835"
 ```
 
 ## Imputing missing values
 
-```{r echo=FALSE}
-paste("Number of rows missing data: ", sum(is.na(activityData$steps)))
+
+```
+## [1] "Number of rows missing data:  2304"
 ```
 
 Setting missing rows to the mean for that interval
 
-```{r}
+
+```r
 grouped <- group_by(activityData, interval)
 withMean <- mutate(grouped, meanIntvl=mean(steps, na.rm=TRUE))
 withMean$steps <- ifelse(is.na(withMean$steps), withMean$meanIntvl, withMean$steps)
@@ -75,15 +108,22 @@ withMean$steps <- ifelse(is.na(withMean$steps), withMean$meanIntvl, withMean$ste
 
 
 Sum and plot by day
-```{r}
+
+```r
 sums <- aggregate(withMean$steps, by=list(Day=withMean$date), FUN=sum)
 plot(sums, type="h", ylab="Steps")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
 
-```{r echo=FALSE}
-paste("Mean steps per day:", mean(sums$x, na.rm=TRUE))
-paste("Median steps per day:", median(sums$x, na.rm=TRUE))
+
+
+```
+## [1] "Mean steps per day: 10766.1886792453"
+```
+
+```
+## [1] "Median steps per day: 10766.1886792453"
 ```
 
 Estimating missing data seems to have no effect on mean and median steps per day
@@ -92,7 +132,8 @@ Estimating missing data seems to have no effect on mean and median steps per day
 
 Calculate day type and plot steps by type
 
-```{r}
+
+```r
 dayType <- mutate(withMean, dayCat=ifelse(weekdays(date) == "Saturday" | weekdays(date) == "Sunday", "weekend", "weekday"))
 
 weekdays <- dayType[dayType$dayCat=="weekday",]
@@ -107,6 +148,7 @@ weekdays$steps <- weekdays$steps / length(unique(activityData$date))
 par(mfrow=c(2,1))
 plot(weekendSums, type="l", main="Weekends")
 plot(weekdaySums, type="l", main="Weekdays")
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-12-1.png) 
 
